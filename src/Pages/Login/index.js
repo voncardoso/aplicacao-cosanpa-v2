@@ -1,5 +1,5 @@
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {  useNavigate, useParams } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
 import { BackgroundImg, FormLogin, InfoLogin, LoginContainer } from "./style";
@@ -31,6 +31,11 @@ export function Login() {
             console.log("error")
           });
   }
+
+  useEffect(() =>{
+    
+  },[])
+  
 
   return (
 

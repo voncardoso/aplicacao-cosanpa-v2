@@ -4,7 +4,7 @@ import ReactMapGL, { Layer, Source } from "react-map-gl";
 import { useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
 import Rede from "../../geojson/rede_antiga.geojson"
-
+import axios from 'axios';
 
 export function MapKML() {
   const [contracts, setContracts] = useState([]);
@@ -12,6 +12,7 @@ export function MapKML() {
   const [viewport, setViewport] = useState({});
   const params = useParams();
   const [workData, setWorkData] = useState([]);
+
 
 
   useEffect(() => {
@@ -55,49 +56,33 @@ export function MapKML() {
     return item.id === params.id;
   });
 
-  let urlTeste = "";
-
-  if (kml) {
-    const  storageRef = storage.ref();
-    const geoJsonRef = storageRef.child( "KML/PA/ALENQUER/16-2022/rede_antiga.geojson");
+  async function getGeoJSON() {
+    try {
+      // Referência ao arquivo no armazenamento do Firebase
+      const geoJSONRef = storage.ref('GEOJSON/rede_antiga.geojson');
       
-    geoJsonRef
-      .getDownloadURL()
-      .then((url) => {
-        fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          console.log("teste",data)
-        })
-        .catch(error => {
-          // Lida com erros ao tentar analisar o arquivo GeoJSON
-        });
-      })
-      .catch((error) => console.error(error));
-
+      geoJSONRef.getDownloadURL()
+    .then(url => {
+    console.log(url); // Imprime a URL do arquivo GeoJSON
+      fetch(url, {headers: {"Access-Control-Allow-Origin": "*"}, method: "no-cors"})
+      .then(response => {
+        const data = response.data;
+        console.log(data); // Imprime o conteúdo do arquivo GeoJSON
+     })
+  .catch(error => {
+    console.error(error);
+  });
+  })
+  .catch(error => {
+    console.error(error);
+  });
+     
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-   useEffect(() => {
-     
-   }, [kml]);
-
-   function Teste(){
-    console.log("saghj")
-
-    fetch(urlTeste)
-    .then(response => response.json())
-    .then(data => {
-      console.log("teste",data)
-    })
-    .catch(error => {
-      // Lida com erros ao tentar analisar o arquivo GeoJSON
-    });
-   
-   }
-
-   Teste()
-  
- console.log("json", geojsonData)
+  getGeoJSON();
 
   const layerStylePara = {
     id: "maine0",
