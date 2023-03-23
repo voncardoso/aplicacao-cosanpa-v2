@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
 import Rede from "../../geojson/rede_antiga.geojson"
 import axios from 'axios';
+import { Container } from "./style";
 
 export function MapKML() {
   const [contracts, setContracts] = useState([]);
@@ -98,29 +99,26 @@ export function MapKML() {
     },
     
   };
-  console.log(workData)
 
   return (
-    <>
+    <Container>
+      {" "}
       <ReactMapGL
-        mapboxAccessToken="pk.eyJ1Ijoidm9uMzQiLCJhIjoiY2w5NzRuOHpsMTRqNDNvb3pjMG52M2cxNyJ9.UGOW9fwC70K9dNuX23SBdQ"
         initialViewState={{
-          longitude: -122.4,
-          latitude: 37.8,
+          latitude: -1.9450735,
+          longitude: -54.7422771,
           zoom: 14,
         }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapboxAccessToken="pk.eyJ1Ijoidm9uMzQiLCJhIjoiY2w5NzJkaTI0MnJ6eTNub2l1dXA4M3YxeCJ9.Z0GAMbATYKVCN_esIi7lFw"
         {...viewport}
+        onViewportChange={(event) => setViewport(event)}
         cooperativeGestures={true}
       >
-        <FullscreenControl position="bottom-right" />
-        <GeolocateControl position="bottom-right" />
-        <NavigationControl position="bottom-right" />
-
         <Source id="line-layer" type="geojson" lineMetrics data={geojsonData}>
           <Layer {...rede2} />
         </Source>
       </ReactMapGL>
-    </>
+    </Container>
   );
 }
